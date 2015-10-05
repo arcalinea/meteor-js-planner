@@ -10,6 +10,19 @@
         Hide Completed Tasks
       </label>
 
+       {{#if currentUser}}
+        <form class="new-plan">
+          <input type="text" name="text" placeholder="New plan" />
+        </form>
+       {{/if}}
+
+       <br>
+			<select class="select-plan">
+				{{#each plans}}
+					<option value="{{ _id }}">{{ text }}</option>
+				{{/each}}
+			</select> 
+
        {{> loginButtons}}
 
        {{#if currentUser}}
@@ -32,6 +45,6 @@
 	<li class="{{#if checked}}checked{{/if}}">
 		<button class="delete">&times;</button>
 		<input type="checkbox" checked="{{checked}}" class="toggle-checked"/>
-  	<span class="text"><strong>{{username}}</strong> - {{text}}</span>
+  	<span class="text"><strong>{{username}}</strong> - {{text}}</span> - {{ plan_name }}
 	</li>
 </template>

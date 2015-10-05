@@ -1,7 +1,7 @@
 
 
 // if (Meteor.isClient) {
-  // This code only runs on the client
+//   This code only runs on the client
 //   Template.body.helpers({
 //     tasks: [
 //       { text: "This is task 1" },
@@ -14,6 +14,7 @@
 
 
 Tasks = new Mongo.Collection("tasks");
+Plans = new Mongo.Collection("plans");
 
 if (Meteor.isClient) {
   // This code only runs on the client
@@ -32,21 +33,48 @@ if (Meteor.isClient) {
     },
     incompleteCount: function () {
       return Tasks.find({checked: {$ne: true}}).count();
+     },
+    plans: function() {
+      return Plans.find({});
     }
   });
 
     Template.body.events({
+    "submit .new-plan": function (event) {
+      event.preventDefault();
+      var text = event.target.text.value;
+      Plans.insert({
+        text: text,
+        createdAt: new Date(),
+        owner: Meteor.userId(),
+        username: Meteor.user().username,
+        // What should the id be? auto-generated? 
+      });
+      // plan_id = PlanId();
+
+      event.target.text.value = "";
+    },
+
+
     "submit .new-task": function (event) {
       // Prevent default browser form submit
       event.preventDefault();
       // Get value from form element
       var text = event.target.text.value;
       // Insert a task into the collection
+      // plan_id = PlanId();
+
+      var plan_id = $(".select-plan").val();
+      var plan_name = $(".select-plan").find(":selected").text();
+
       Tasks.insert({
         text: text,
         createdAt: new Date(), // current time
         owner: Meteor.userId(), // _id of logged in user
-        username: Meteor.user().username  // username of logged in user
+        username: Meteor.user().username,  // username of logged in user
+        // Store task with reference to plan
+        plan_id: plan_id,
+        plan_name: plan_name
       });
       // Clear form
       event.target.text.value = "";
