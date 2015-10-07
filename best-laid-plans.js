@@ -1,7 +1,7 @@
 
 
 // if (Meteor.isClient) {
-//   This code only runs on the client
+//   This seeds the database, runs on client only
 //   Template.body.helpers({
 //     tasks: [
 //       { text: "This is task 1" },
@@ -12,32 +12,42 @@
 // }
 
 
-
 Tasks = new Mongo.Collection("tasks");
 Plans = new Mongo.Collection("plans");
 
 if (Meteor.isClient) {
   // This code only runs on the client
   Template.body.helpers({
-    tasks: function () {
-      if (Session.get("hideCompleted")) {
-        // If hide completed is checked, filter tasks
-        return Tasks.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
-      } else {
-        // Otherwise, return all of the tasks
-        return Tasks.find({}, {sort: {createdAt: -1}});
-      }
-    },
     hideCompleted: function () {
       return Session.get("hideCompleted");
     },
+    plans: function() {
+      return Plans.find({}, {sort: {createdAt: -1}});
+    },
+    planSelected: function () {
+        // var found_tasks = Tasks.find({}, {plan_id: plan_id});
+       return Session.get("planSelected");
+     }
+  });
+
+  Template.plans_container.helpers({
+    tasks: function () {
+      var id = Session.get("planSelected");
+      console.log(id);
+      if (id) {
+        if (Session.get("hideCompleted")){
+          // If hide completed is checked, filter tasks
+          return Tasks.find( { $and: [ {plan_id: id}, {checked: {$ne: true}} ] }, {sort: {createdAt: -1}});
+        } else {
+          return Tasks.find({plan_id: id}, {sort: {createdAt: -1}});
+        }
+      }
+    },
     incompleteCount: function () {
       return Tasks.find({checked: {$ne: true}}).count();
-     },
-    plans: function() {
-      return Plans.find({});
     }
   });
+
 
     Template.body.events({
     "submit .new-plan": function (event) {
@@ -84,6 +94,23 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.plans_container.events({
+    "click .plan li": function(){
+      var plan_id = event.target.id
+      // console.log(plan_id)
+      // What is event targeting? "checked" is assigned class name
+
+      // Blaze.insert(Blaze.renderWithData(Template.task, {plan_id: plan_id}), document.querySelector(.tasks_container))
+
+      Session.set("planSelected", plan_id);
+
+
+      // console.log(found_tasks);
+    },
+    "click .delete": function () {
+      Plans.remove(this._id);
+    }
+  });
 
   Template.task.events({
     "click .toggle-checked": function () {

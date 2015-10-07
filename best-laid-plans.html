@@ -3,48 +3,105 @@
 
   <div class="container">
 
-    <header>
-      <h1>Todo List ({{incompleteCount}})</h1>
-      <label class="hide-completed">
-        <input type="checkbox" checked="{{hideCompleted}}" />
-        Hide Completed Tasks
-      </label>
+    <header class="navbar navbar-default">
+    	<h1 class="navbar-brand">Plan Todos</h1>
 
-       {{#if currentUser}}
-        <form class="new-plan">
-          <input type="text" name="text" placeholder="New plan" />
-        </form>
-       {{/if}}
+    	<button id="login" type="button" class="btn btn-default" aria-label="Left Align">
+	      {{> loginButtons}}
+	    </button>
 
-       <br>
-			<select class="select-plan">
-				{{#each plans}}
-					<option value="{{ _id }}">{{ text }}</option>
-				{{/each}}
-			</select> 
+      <div class="container-fluid">
 
-       {{> loginButtons}}
+	      <div class="row"> 
+		      <div class="col-md-3">
+		      	<div class="input-group" id="plan-selection">
+		      		<!-- <span class="col-sm-6 input-group-addon"> -->
+			      		<!-- <span class="input-group-addon"> -->
+									<select class="select-plan form-control">
+										{{#each plans}}
+											<option value="{{ _id }}">{{ text }}</option>
+										{{/each}}
+									</select> 
+								<!-- </span> -->
+							<!-- </span> -->
+							{{#if currentUser}}
+							<!-- <div class="col-sm-6"> -->
+				        <form class="new-plan">
+				          <input type="text" class="form-control" name="text" placeholder="New plan" />
+				        </form>
+				      <!-- </div> -->
+			       {{/if}}
+						</div>
+					</div>
+				</div>
+			</div>
 
-       {{#if currentUser}}
-        <form class="new-task">
-          <input type="text" name="text" placeholder="Type to add new tasks" />
-        </form>
-       {{/if}}
+		 {{#if currentUser}}
+      <form class="new-task">
+        <input type="text" class="form-control" name="text" placeholder="Type to add new tasks" />
+      </form>
+     {{/if}}
+
 
     </header>
 
-    <ul>
-      {{#each tasks}}
-        {{> task}}
-      {{/each}}
-    </ul>
+    	{{> plans_container plans=plans}}
+
   </div>
 </body>
+
+<template name="plans_container">
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><strong>Plans</strong></div>
+		<div class="panel-body">
+			<ul class="plan">
+			{{#each plans}}
+				{{> plan}}
+			{{/each}}
+			</ul>
+		</div>
+	</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><strong>Tasks</strong> ({{incompleteCount}})
+				<label class="hide-completed">
+	        <input type="checkbox" checked="{{hideCompleted}}" />
+	        Hide Completed
+	      </label>
+			</div>
+			<div class="panel-body">
+				{{#each tasks}}
+					{{> task}}
+				{{/each}}
+			</div>
+		</div>
+
+</template>
+
+
+<!-- <template name="tasks_container">
+	<ul class="task">
+		{{#each tasks}}
+		  {{> task}}
+		{{/each}}
+	</ul>
+</template> -->
+
+<template name="plan">
+	<li>
+  	<span class="text"><strong>{{username}}</strong> - <span class="plan_name" id="{{_id}}"> {{text}} </span> 
+  	</span>
+  	<button class="delete">&times;</button>
+  </li>
+	
+</template>
+
 
 <template name="task">
 	<li class="{{#if checked}}checked{{/if}}">
 		<button class="delete">&times;</button>
 		<input type="checkbox" checked="{{checked}}" class="toggle-checked"/>
-  	<span class="text"><strong>{{username}}</strong> - {{text}}</span> - {{ plan_name }}
+  	<span class="text"><strong>{{username}}</strong> - {{text}}</span> 
 	</li>
 </template>

@@ -1,7 +1,7 @@
 /* CSS declarations go here */
 * CSS declarations go here */
 body {
-  font-family: sans-serif;
+  font-family: Helvetica, sans-serif;
   background-color: #315481;
   background-image: linear-gradient(to bottom, #315481, #918e82 100%);
   background-attachment: fixed;
@@ -23,6 +23,7 @@ body {
   margin: 0 auto;
   min-height: 100%;
   background: white;
+  font-family: Helvetica, sans-serif;
 }
 
 header {
@@ -36,12 +37,21 @@ header {
   display: block;
 }
 
+a#login-name-link.login-link-text{
+	text-decoration: none;
+}
+
 h1 {
   font-size: 1.5em;
+  font-family: Helvetica, sans-serif;
   margin: 0;
   margin-bottom: 10px;
   display: inline-block;
   margin-right: 1em;
+}
+
+.navbar .navbar-fixed-top h1 {
+  text-align: center;
 }
 
 form {
@@ -58,6 +68,7 @@ form {
   width: 100%;
   padding-right: 80px;
   font-size: 1em;
+  position: relative;
 }
 
 .new-task input:focus{
@@ -77,13 +88,13 @@ ul {
   font-size: 1em;
   border: none;
   position: relative;
+  color: gray;
 }
 
 li {
   position: relative;
   list-style: none;
   padding: 15px;
-  border-bottom: #eee solid 1px;
 }
 
 li .text {
@@ -103,7 +114,7 @@ li.private {
   border-color: #ddd;
 }
 
-header .hide-completed {
+.hide-completed {
   float: right;
 }
 
@@ -126,3 +137,27 @@ header .hide-completed {
   }
 }
 
+.plan {
+	left: 0;
+	float: left;
+}
+
+.plan li{
+  display: inline-block; 
+  padding: 0;
+  text-align: center;
+}
+
+
+
+#plan-selection {
+	position: relative;
+}
+
+.navbar-brand {
+    float: left;
+    height: 70px;
+    padding: 15px 15px;
+    font-size: 38px;
+    line-height: 20px;
+}
